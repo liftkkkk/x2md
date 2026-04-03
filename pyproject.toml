@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "x2md"
+version = "0.1.0"
+description = "x2md：PDF/图片/音视频 -> Markdown/TXT（含 OCR、批处理与音视频辅助）"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+keywords = ["pdf", "ocr", "markdown", "pymupdf", "dashscope"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Text Processing",
+  "Topic :: Utilities",
+]
+dependencies = [
+  "PyMuPDF>=1.23.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/<your-org-or-user>/x2md"
+Repository = "https://github.com/<your-org-or-user>/x2md"
+Issues = "https://github.com/<your-org-or-user>/x2md/issues"
+
+[project.optional-dependencies]
+ocr = ["dashscope>=1.20.0"]
+asr = ["modelscope>=1.13.0"]
+dev = [
+  "build>=1.2.0",
+  "pytest>=8.0.0",
+  "ruff>=0.5.0",
+  "twine>=5.0.0",
+  "mypy>=1.10.0",
+]
+
+[project.scripts]
+x2md = "x2md.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
