@@ -1,0 +1,2 @@
+[console_scripts]
+x2md = x2md.cli:main

@@ -1,0 +1,14 @@
+PyMuPDF>=1.23.0
+
+[asr]
+modelscope>=1.13.0
+
+[dev]
+build>=1.2.0
+pytest>=8.0.0
+ruff>=0.5.0
+twine>=5.0.0
+mypy>=1.10.0
+
+[ocr]
+dashscope>=1.20.0

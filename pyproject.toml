@@ -28,11 +28,6 @@ dependencies = [
   "PyMuPDF>=1.23.0",
 ]
 
-[project.urls]
-Homepage = "https://github.com/<your-org-or-user>/x2md"
-Repository = "https://github.com/<your-org-or-user>/x2md"
-Issues = "https://github.com/<your-org-or-user>/x2md/issues"
-
 [project.optional-dependencies]
 ocr = ["dashscope>=1.20.0"]
 asr = ["modelscope>=1.13.0"]

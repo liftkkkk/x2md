@@ -8,6 +8,8 @@ from typing import Iterator, Optional, Sequence, Union
 
 
 _PAGE_RE = re.compile(r"page_(\d+)\.", re.IGNORECASE)
+_OPEN_FENCE_LINE_RE = re.compile(r"^\s*```[a-zA-Z0-9_-]*\s*$")
+_CLOSE_FENCE_LINE_RE = re.compile(r"^\s*```\s*$")
 
 
 def ensure_dir(path: Union[str, os.PathLike]) -> Path:
@@ -57,8 +59,23 @@ def sorted_files(
 
 
 def strip_markdown_code_fences(text: str) -> str:
-    text = text.replace("```markdown", "")
-    return text.replace("```", "")
+    lines = text.splitlines(keepends=True)
+    if not lines:
+        return text
+
+    start = 0
+    while start < len(lines) and lines[start].strip() == "":
+        start += 1
+    if start >= len(lines) or not _OPEN_FENCE_LINE_RE.match(lines[start].rstrip("\n")):
+        return text
+
+    end = len(lines) - 1
+    while end >= 0 and lines[end].strip() == "":
+        end -= 1
+    if end <= start or not _CLOSE_FENCE_LINE_RE.match(lines[end].rstrip("\n")):
+        return text
+
+    return "".join(lines[:start] + lines[start + 1 : end] + lines[end + 1 :])
 
 
 @dataclass(frozen=True)

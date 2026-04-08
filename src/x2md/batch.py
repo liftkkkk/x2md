@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional, Union
 
 from .merge import merge_markdown_dir
-from .ocr import DEFAULT_MODEL, DEFAULT_PROMPT, ocr_folder_to_markdown
+from .ocr import DEFAULT_MODEL, DEFAULT_PROMPT, DEFAULT_PROVIDER, ocr_folder_to_markdown
 from .pdf import pdf_to_png
 from .utils import RetryPolicy, ensure_dir, page_sort_key
 
@@ -18,11 +18,15 @@ def process_single_pdf(
     *,
     output_base_dir: Union[str, os.PathLike],
     dpi: int = 300,
+    provider: str = DEFAULT_PROVIDER,
     model: str = DEFAULT_MODEL,
     prompt: str = DEFAULT_PROMPT,
     api_key: Optional[str] = None,
     retry: RetryPolicy = RetryPolicy(),
     force: bool = False,
+    keep_going: bool = True,
+    fail_dir: Optional[Union[str, os.PathLike]] = None,
+    cost_per_page: Optional[float] = None,
 ) -> Path:
     pdf_path = Path(pdf_path)
     pdf_stem = pdf_path.stem
@@ -43,17 +47,20 @@ def process_single_pdf(
     else:
         logger.info("images 已存在，跳过 PDF 转图片: %s", images_dir)
 
-    if force or not any(markdown_dir.glob("*.md")):
-        ocr_folder_to_markdown(
-            images_dir,
-            markdown_dir,
-            api_key=api_key,
-            model=model,
-            prompt=prompt,
-            retry=retry,
-        )
-    else:
-        logger.info("markdown 已存在，跳过 OCR: %s", markdown_dir)
+    ocr_folder_to_markdown(
+        images_dir,
+        markdown_dir,
+        provider=provider,
+        api_key=api_key,
+        model=model,
+        prompt=prompt,
+        retry=retry,
+        force=force,
+        keep_going=keep_going,
+        fail_dir=fail_dir,
+        manifest_path=str(paper_output_dir / "ocr_manifest.jsonl"),
+        cost_per_page=cost_per_page,
+    )
 
     merge_markdown_dir(markdown_dir, merged_file, strip_fences=True, include_headers=False)
     logger.info("处理完成: %s", merged_file)
@@ -66,6 +73,7 @@ def process_batch(
     output_base_dir: Union[str, os.PathLike],
     limit: Optional[int] = None,
     dpi: int = 300,
+    provider: str = DEFAULT_PROVIDER,
     model: str = DEFAULT_MODEL,
     prompt: str = DEFAULT_PROMPT,
     api_key: Optional[str] = None,
@@ -98,6 +106,7 @@ def process_batch(
                 pdf_path,
                 output_base_dir=output_base_dir,
                 dpi=dpi,
+                provider=provider,
                 model=model,
                 prompt=prompt,
                 api_key=api_key,
