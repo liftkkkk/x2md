@@ -1,101 +1,103 @@
-# 🚀 x2md: 让非结构化文档一键变身为干净的 Markdown
+# 🚀 x2md: Turn Unstructured Documents into Clean Markdown in One Click
 
-`x2md` (X to Markdown) 是一站式智能文档处理工具集。它能够将复杂的 **PDF、论文、图片及音视频** 快速转化为结构清晰、易于编辑的 **Markdown** 或 **TXT** 格式。
+**English** | [简体中文](./README.zh-CN.md)
 
-无论你是为了 **LLM 知识库预处理**、**学术论文整理**，还是**会议纪要自动化**，`x2md` 都能为你提供企业级的生产力支持。
+`x2md` (X to Markdown) is a one-stop intelligent document-processing toolkit. It converts complex **PDFs, academic papers, images, and audio/video** into well-structured, easy-to-edit **Markdown** or **TXT**.
 
----
-
-## 🌟 核心价值
-
-### 1. 实验室级别的论文还原
-不仅仅是提取文字。针对学术论文，我们通过“高分渲染 + 智能 OCR”方案，最大程度保留：
-* **数学公式**（LaTeX 友好）
-* **复杂排版与层级结构**
-* **多页无缝合并**
-
-### 2. 工业级批处理能力
-告别手动一个一个文件操作：
-* **断点续爬**：程序中断？没关系，重启后自动跳过已完成页面。
-* **可审计清单**：生成的 `manifest.jsonl` 自动计算成功率、耗时及 API 成本。
-* **错误追溯**：失败样本自动落盘，一眼定位识别难点。
-
-### 3. 多模态全覆盖
-除了文档，它还是你的媒体助手：
-* **视频/音频转文字**：内置 ASR 能力，快速生成会议纪要草稿。
-* **极致轻量**：支持纯文本快速模式，秒级处理百页文档。
+Whether you are preprocessing an **LLM knowledge base**, organizing **academic papers**, or automating **meeting notes**, `x2md` delivers enterprise-grade productivity.
 
 ---
 
-## 🛠️ 快速开始
+## 🌟 Core Value
 
-### 1. 安装
-根据你的需求选择安装规模：
+### 1. Lab-grade paper reconstruction
+More than text extraction. For academic papers, the "high-DPI rendering + intelligent OCR" pipeline preserves as much as possible:
+* **Math formulas** (LaTeX-friendly)
+* **Complex layout and hierarchy**
+* **Seamless multi-page merging**
+
+### 2. Industrial-grade batch processing
+Stop handling files one by one:
+* **Resumable runs**: interrupted? No problem — on restart, completed pages are skipped automatically.
+* **Auditable manifest**: the generated `manifest.jsonl` computes success rate, elapsed time, and API cost.
+* **Error tracing**: failed samples are written to disk, so recognition hotspots are easy to spot.
+
+### 3. Full multimodal coverage
+Beyond documents, it is also your media assistant:
+* **Video/audio to text**: built-in ASR quickly drafts meeting minutes.
+* **Extremely lightweight**: a plain-text fast mode processes hundred-page documents in seconds.
+
+---
+
+## 🛠️ Quick Start
+
+### 1. Install
+Pick the install size you need:
 ```bash
-pip install x2md              # 基础版：PDF 纯文本转换
-pip install "x2md[ocr]"       # 增强版：支持公式还原、图片 OCR (推荐)
-pip install "x2md[asr]"       # 全能版：增加音视频转写功能
+pip install x2md              # Basic: PDF plain-text conversion
+pip install "x2md[ocr]"       # Enhanced: formula reconstruction, image OCR (recommended)
+pip install "x2md[asr]"       # Full: adds audio/video transcription
 ```
 
-### 2. 三步搞定复杂论文转换
-只需简单三步，将一篇 PDF 论文转化为完美的 Markdown：
+### 2. Convert a complex paper in three steps
+Three simple commands turn a PDF paper into perfect Markdown:
 ```bash
-# 1. 转换为高分图片
+# 1. Render to high-DPI images
 x2md pdf2png "paper.pdf" "imgs"
 
-# 2. 智能识别 (需要 DashScope API Key)
+# 2. Intelligent OCR (requires a DashScope API key)
 x2md ocr "imgs" "results" --keep-going
 
-# 3. 自动合并
+# 3. Merge automatically
 x2md merge "results" "paper_final.md"
 ```
 
 ---
 
-## 💡 常用场景指南
+## 💡 Common Scenarios
 
-### 📂 批量处理整个文件夹
-适合构建知识库或处理大量历史档案：
+### 📂 Batch-process an entire folder
+For building knowledge bases or processing large historical archives:
 ```bash
-# 批量处理“待处理”目录，结果自动归档至“结果”目录
+# Batch-process the "todo" directory; results are archived under "output"
 x2md batch --input-pdf-dir "./my_papers" --output-base-dir "./output"
 
-# 提取所有转换成功的 Markdown 文件到统一文件夹
+# Collect all successfully merged Markdown files into one folder
 x2md collect --only-merged --source-root "./output" --target-dir "./final_md"
 ```
 
-### 🎙️ 视频/音频整理
-快速从视频中提取音频并转写为文字：
+### 🎙️ Video/audio organization
+Extract audio from video and transcribe it to text quickly:
 ```bash
 x2md video2audio "meeting.mp4" -o "voice.wav"
 x2md asr "voice.wav" -o "summary.json" --model-folder "./models"
 ```
 
-### 📊 质量评估与服务化
-* **质量评测**：`x2md eval` 支持将识别结果与标准答案对比，计算准确率。
-* **成本分析**：`x2md report` 一键生成处理时长与成本报告。
-* **API 服务**：`x2md serve` 瞬间将工具能力转化为后端 API 接口。
+### 📊 Quality evaluation & serving
+* **Evaluation**: `x2md eval` compares recognition results against ground truth and computes accuracy.
+* **Cost analysis**: `x2md report` generates a time-and-cost report in one command.
+* **API service**: `x2md serve` instantly turns the toolkit's capabilities into backend API endpoints.
 
 ---
 
-## ⚠️ 使用贴士
+## ⚠️ Tips
 
-1.  **API 配置**：使用智能 OCR 功能前，请确保设置了环境变量：
-    * `export DASHSCOPE_API_KEY=你的密钥`
-2.  **多媒体依赖**：处理音视频需要系统安装有 `FFmpeg`。
-3.  **本地 ASR**：为了提速，建议通过 `--model-folder` 指定本地已下载的模型路径。
+1.  **API config**: before using intelligent OCR, make sure the environment variable is set:
+    * `export DASHSCOPE_API_KEY=your_key`
+2.  **Multimedia dependencies**: audio/video processing requires `FFmpeg` installed on the system.
+3.  **Local ASR**: for speed, point `--model-folder` to a locally downloaded model.
 
 ---
 
-## 📈 为什么选择 x2md？
+## 📈 Why choose x2md?
 
-| 特性 | 传统 OCR 工具 | x2md |
+| Feature | Traditional OCR tools | x2md |
 | :--- | :--- | :--- |
-| **公式支持** | 差，经常乱码 | **优，适配 LaTeX** |
-| **处理效率** | 单线程，易崩溃 | **高并发批处理，支持断点重连** |
-| **透明度** | 黑盒操作 | **详尽的成本与成功率清单** |
-| **多模态** | 仅限文档 | **PDF / 图片 / 音视频 全覆盖** |
+| **Formula support** | Poor, often garbled | **Excellent, LaTeX-friendly** |
+| **Throughput** | Single-threaded, fragile | **High-concurrency batch, resumable** |
+| **Transparency** | Black box | **Detailed cost and success-rate manifests** |
+| **Modality** | Documents only | **PDF / images / audio & video, fully covered** |
 
 ---
 
-**立即开始使用 x2md，释放你的文档生产力！**
+**Start using x2md now and unleash your document productivity!**
